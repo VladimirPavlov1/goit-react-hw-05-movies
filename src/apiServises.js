@@ -36,4 +36,9 @@ export const getMovieDetails=(movieId)=>{
   }
 
 
+  export const getCast=(movieId)=>{
+
+    return axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=27cddf1230eab22bdf20f54c99a70037`)
+    
+  }
 

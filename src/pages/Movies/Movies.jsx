@@ -1,37 +1,41 @@
-import { Formik,Form,Field } from 'formik';
+import { Formik,Form,Field} from 'formik';
 import { useState,useEffect } from 'react';
 import { getMovieByName } from 'apiServises'; 
-
+import { MovieList } from 'components/MovieList/MovieList';
 
 
 export const Movies = () =>{
     const [searchName, setSearchName] = useState('')
-    
+    const [items,setItems] = useState([])
 
  
 
-   const handleSubmit=(values,actions)=>{
+   const handleSubmit=(values)=>{
    console.log(values)
-    console.log(actions)
+   const {queryName} = values;
+    setSearchName(searchName=>searchName=queryName);
+  
    }
 
    useEffect(() => {
     if(searchName===''){
         return
     }
-    console.log(searchName)
-    getMovieByName(searchName).then(res=>console.log(res))
+    
+    getMovieByName(searchName).then(data=>setItems(items=>items=data.data.results))
    }, [searchName])
     
     
     return (
         <div>
-            <Formik  initialValues={''} onSubmit={handleSubmit}>
+            <Formik initialValues={{ queryName: '' }} onSubmit={handleSubmit}>
                 <Form>
-                    <Field name='searchName'/>
+                    <Field name='queryName'/>
                     <button type='submit'>Пошук</button>
                 </Form>
+
             </Formik>
+            <MovieList items={items}/>
         </div>
     )
 }

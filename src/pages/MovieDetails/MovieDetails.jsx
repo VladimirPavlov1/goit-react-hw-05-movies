@@ -3,6 +3,9 @@ import { useState, useEffect } from "react"
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Home } from "pages/Home/Home";
+import { Cast } from "components/Cast/Cast";
+import { Reviews } from "components/Reviews/Reviews";
+import { Outlet } from "react-router-dom";
 
 export const MovieDetails = () => {
  const {movieId} = useParams();
@@ -13,7 +16,7 @@ export const MovieDetails = () => {
     
     useEffect(() => {
        
-        if(movieId){
+        if(movieId===null){return}else{
             getMovieDetails(movieId).then(data=>setMovie(movie=>movie=data.data)).catch(error=>console.log(error))
         }
         
@@ -54,6 +57,16 @@ export const MovieDetails = () => {
                     <p> {getGenresFromMovie()}</p>
                 </li>
             </ul>)}
+            <h3>Aditional information</h3>
+            <ul>
+                <li>
+                    <Link to='cast' element={<Cast/>}><h3>Cast</h3></Link>
+                </li>
+                <li>
+                    <Link to='reviews' element={<Reviews/>}><h3>Reviews</h3></Link>
+                </li>
+            </ul>
+            <Outlet/>
         </div>
     )
 }
