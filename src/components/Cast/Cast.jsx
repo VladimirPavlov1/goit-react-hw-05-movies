@@ -15,7 +15,10 @@ export const Cast = () => {
 
     useEffect(() => {
     if(movieId!==null){
-        getCast(movieId).then(data=>setItems(items=>[...items,...data.data.cast]))
+        getCast(movieId).then(data=>{
+          setItems(items=>[...getCleanItems(data.data.cast)])
+           
+        })
     }
     }, [movieId])
     
@@ -32,11 +35,17 @@ export const Cast = () => {
             })
          return photo
     }
-  
+    
+    const getCleanItems = (array)=>{
+        return array.filter(({id})=>id===id);
+      
+    }
+    
+    
     return (
        <ul>
         {items&&items.map(({character,id,original_name,profile_path})=>{
-              console.log(getUserPhoto())   
+              
             return <li key={[character,id]}>
                 <img src={getUserPhoto(profile_path)} alt="jdghh" width="100px"/>
                 <h3>{original_name}</h3>

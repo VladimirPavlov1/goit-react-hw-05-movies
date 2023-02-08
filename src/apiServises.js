@@ -42,3 +42,9 @@ export const getMovieDetails=(movieId)=>{
     
   }
 
+  export const getReviews=(movieId)=>{
+
+    return axios.get(`https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=27cddf1230eab22bdf20f54c99a70037`)
+    
+  }
+
