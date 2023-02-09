@@ -1,5 +1,5 @@
 import {getTrend} from "apiServises"
-import { MovieList } from "components/MovieList/MovieList";
+import  MovieList  from "components/MovieList/MovieList";
 import { useState, useEffect } from "react";
 
 
@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 
 
 
-export const Home = () => {
+ const Home = () => {
    const [items, setItems]=useState([]);
 
    
@@ -25,3 +25,5 @@ export const Home = () => {
         </div>
     )
 }
+
+export default Home;

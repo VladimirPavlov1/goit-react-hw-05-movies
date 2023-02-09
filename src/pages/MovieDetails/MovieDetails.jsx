@@ -1,18 +1,20 @@
 import { getMovieDetails } from 'apiServises';
 import { useState, useEffect } from 'react';
 import { useLocation, useParams,NavLink } from 'react-router-dom';
-import { Cast } from 'components/Cast/Cast';
-import { Reviews } from 'components/Reviews/Reviews';
+import Cast  from 'components/Cast/Cast';
+import  Reviews  from 'components/Reviews/Reviews';
 import { Outlet } from 'react-router-dom';
 import { Arrow,MovieList,BtnLink,Btn, MovieListItem } from './MovieDetails.styled';
+import {toast} from 'react-toastify'
 
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
     const { movieId } = useParams();
 
     const location = useLocation();
 
-    const backLinkHref = location.state?.from ?? '/movies';
+
+    const backLinkHref = location.state?.from  ?? location.state?.location.state.from ?? location.state?.location.state.location.state.from ?? '/movies';
 
     const [movie, setMovie] = useState(null);
 
@@ -21,8 +23,17 @@ export const MovieDetails = () => {
             return;
         } else {
             getMovieDetails(movieId)
-                .then(data => setMovie(movie => (movie = data.data)))
-                .catch(error => console.log(error));
+                .then(data =>{
+                    if(data.data.length===0){
+                        toast.warn('Нажаль нічого не знайдено',{autoclose:3000,theme:"colored"});
+                    return
+                    }
+                    setMovie(movie => movie = data.data)
+                })
+                .catch(({ message }) => {
+                    message = 'Щось пішло не так. Спробуйте ще раз';
+                    return toast.error(message)
+                });
         }
     }, [movieId]);
 
@@ -44,6 +55,11 @@ export const MovieDetails = () => {
         }
     };
 
+    const getReleaseDate=(date)=>{
+       const newDate= date.slice(0,4);
+       return newDate
+    }
+
     return (
         <div>
             <Btn>
@@ -57,7 +73,7 @@ export const MovieDetails = () => {
                         <img src={startImage + movie.poster_path} alt="" />
                     </MovieListItem>
                     <MovieListItem>
-                        <h2>{movie.original_title}</h2>
+                        <h2>{movie.original_title}  ({getReleaseDate(movie.release_date)})</h2>
                         <p>User score:{getUserScoreFromMovie()}%</p>
                         <h2>Overview</h2>
                         <p>{movie.overview}</p>
@@ -69,12 +85,12 @@ export const MovieDetails = () => {
             <h3>Aditional information</h3>
             <ul>
                 <li>
-                    <NavLink to="cast" element={<Cast />}>
+                    <NavLink to="cast" state={{location}} element={<Cast />}>
                         <h3>Cast</h3>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="reviews" element={<Reviews />}>
+                    <NavLink to="reviews" state={{location}}  element={<Reviews />}>
                         <h3>Reviews</h3>
                     </NavLink>
                 </li>
@@ -83,3 +99,6 @@ export const MovieDetails = () => {
         </div>
     );
 };
+
+
+export default MovieDetails;

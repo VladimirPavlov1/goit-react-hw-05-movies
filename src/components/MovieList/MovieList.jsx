@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
+import  MovieDetails  from 'pages/MovieDetails/MovieDetails';
 import { useLocation } from 'react-router-dom';
 
-export const MovieList = ({ items }) => {
+
+const MovieList = ({ items }) => {
    
     const location = useLocation();
-    
+  
     return (
         <div>
             <ul>
@@ -26,3 +27,5 @@ export const MovieList = ({ items }) => {
         </div>
     );
 };
+
+export default MovieList;

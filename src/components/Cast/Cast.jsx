@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { getCast } from 'apiServises';
 import photo_not from '../../image/user_not_found.jpg';
 
-export const Cast = () => {
+const Cast = () => {
     const [items, setItems] = useState([]);
 
     const { movieId } = useParams();
@@ -51,3 +51,5 @@ export const Cast = () => {
         </ul>
     );
 };
+
+export default Cast;

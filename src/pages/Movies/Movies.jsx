@@ -1,14 +1,13 @@
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import { getMovieByName } from 'apiServises';
-import { MovieList } from 'components/MovieList/MovieList';
+import  MovieList  from 'components/MovieList/MovieList';
 import { useSearchParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-import { Input,BtnSearch } from './Movies.styled';
+import { toast } from 'react-toastify';
+import { Input, BtnSearch } from './Movies.styled';
+import 'react-toastify/dist/ReactToastify.css';
 
-
-
-export const Movies = () => {
+const Movies = () => {
     const [searchName, setSearchName] = useState('');
     const [items, setItems] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
@@ -20,12 +19,12 @@ export const Movies = () => {
         setSearchParams(nextParams);
     };
 
-    const handleSubmit = (values,{reset})=> {
+    const handleSubmit = (values, { resetForm }) => {
         const { queryName } = values;
 
         setSearchName(searchName => (searchName = queryName));
         updateQueryString(queryName);
-        reset(values);
+        resetForm(values);
     };
 
     useEffect(() => {
@@ -36,14 +35,17 @@ export const Movies = () => {
         getMovieByName(searchName)
             .then(data => {
                 if (data.data.results.length === 0) {
-                    toast.warn('Нажаль нічого не знайдено');
-                    return
+                    toast.warn('Нажаль нічого не знайдено', {
+                        autoclose: 3000,
+                        theme: 'colored',
+                    });
+                    return;
                 }
                 return setItems(items => (items = data.data.results));
             })
             .catch(({ message }) => {
                 message = 'Щось пішло не так. Спробуйте ще раз';
-                return alert(message);
+                return toast.error(message);
             });
     }, [searchName]);
 
@@ -53,8 +55,20 @@ export const Movies = () => {
         }
 
         getMovieByName(name)
-            .then(data => setItems(items => (items = data.data.results)))
-            .catch(error => console.log(error));
+            .then(data => {
+                if (data.data.results.length === 0) {
+                    toast.warn('Нажаль нічого не знайдено', {
+                        autoclose: 3000,
+                        theme: 'colored',
+                    });
+                    return;
+                }
+                return setItems(items => (items = data.data.results));
+            })
+            .catch(({ message }) => {
+                message = 'Щось пішло не так. Спробуйте ще раз';
+                return toast.error(message);
+            });
     }, [name]);
 
     return (
@@ -66,7 +80,8 @@ export const Movies = () => {
                 </Form>
             </Formik>
             <MovieList items={items} />
-            <ToastContainer/>
         </div>
     );
 };
+
+export default Movies;
