@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 
 
+
 export const Home = () => {
    const [items, setItems]=useState([]);
 
@@ -19,7 +20,6 @@ export const Home = () => {
    
     return (
         <div>
-           
             <h2>Trending today</h2>
             <MovieList items={items}/>
         </div>

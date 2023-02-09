@@ -1,16 +1,28 @@
-import { Link } from "react-router-dom"
-import { MovieDetails } from "pages/MovieDetails/MovieDetails"
+import { NavLink } from 'react-router-dom';
+import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
+import { useLocation } from 'react-router-dom';
 
-
-export const MovieList=({items})=>{
-console.log(items)
+export const MovieList = ({ items }) => {
+   
+    const location = useLocation();
+    
     return (
-        <ul>
-            {items.map(({id,original_title='Name not Found'})=>{
-              
-                return <li key={id}>
-                   <Link to={`/movies/${id}`} element={<MovieDetails/>}>{original_title}</Link>
-                </li>})}
-        </ul>
-    )
-    }
+        <div>
+            <ul>
+                {items.map(({ id, original_title = 'Name not Found' }) => {
+                    return (
+                        <li key={id}>
+                            <NavLink
+                                to={`/movies/${id}`}
+                                state={{ from: location }}
+                                element={<MovieDetails />}
+                            >
+                                {original_title}
+                            </NavLink>
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+    );
+};

@@ -1,10 +1,12 @@
-import {Routes, Route, NavLink} from 'react-router-dom'
+import {Routes, Route } from 'react-router-dom'
 import { Home } from 'pages/Home/Home';
 import { MovieDetails } from 'pages/MovieDetails/MovieDetails';
 import { Movies } from 'pages/Movies/Movies';
 import { Cast } from './Cast/Cast';
 import { Reviews } from './Reviews/Reviews';
 import { NotFound } from 'pages/NotFound/NotFound';
+import { MainLink,Container,Nav, Header } from './App.styled';
+
 
 
 
@@ -12,13 +14,13 @@ import { NotFound } from 'pages/NotFound/NotFound';
 
 export const App = () => {
   return (
-    <div>
-      <header>
-        <nav>
-          <NavLink to="/" end>Home</NavLink>
-          <NavLink to = "/movies">Movies</NavLink>
-        </nav>
-      </header>
+    <Container>
+      <Header>
+        <Nav>
+          <MainLink to="/" end>Home</MainLink>
+          <MainLink to = "/movies">Movies</MainLink>
+        </Nav>
+      </Header>
       
 
       <Routes>
@@ -30,6 +32,6 @@ export const App = () => {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </div>
+    </Container>
   );
 };
