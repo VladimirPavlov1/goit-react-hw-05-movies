@@ -31,8 +31,8 @@ export default MovieList;
 
 MovieList.propTypes = {
     items: PropTypes.arrayOf(
-        PropTypes.exact({
-            id: PropTypes.string.isRequired,
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
             original_title: PropTypes.string.isRequired,
         })
     ),

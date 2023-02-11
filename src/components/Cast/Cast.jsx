@@ -28,7 +28,7 @@ const Cast = () => {
     };
 
     const getCleanItems = array => {
-        return array.filter(({ id }) => id === id);
+        return array.filter(({ id }) => id.includes(id));
     };
 
     return (
