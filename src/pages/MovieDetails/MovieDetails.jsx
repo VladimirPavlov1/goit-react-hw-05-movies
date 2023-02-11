@@ -59,12 +59,12 @@ const MovieDetails = () => {
             <h3>Aditional information</h3>
             <ul>
                 <li>
-                    <NavLink to="cast" state={{ from:backLinkHref }} element={<Cast />}>
+                    <NavLink to="cast" state={{ from:backLinkHref }} >
                         <h3>Cast</h3>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink to="reviews"  state={{ from:backLinkHref }} element={<Reviews />}>
+                    <NavLink to="reviews"  state={{ from:backLinkHref }} >
                         <h3>Reviews</h3>
                     </NavLink>
                 </li>
