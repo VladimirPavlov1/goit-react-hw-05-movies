@@ -7,7 +7,6 @@ const Cast = () => {
     const [items, setItems] = useState([]);
 
     const { movieId } = useParams();
-  
 
     useEffect(() => {
         if (movieId !== null) {

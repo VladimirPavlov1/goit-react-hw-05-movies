@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import { getMovieByName } from 'apiServises';
-import  MovieList  from 'components/MovieList/MovieList';
+import MovieList from 'components/MovieList/MovieList';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Input, BtnSearch } from './Movies.styled';

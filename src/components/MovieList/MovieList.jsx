@@ -1,12 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import  MovieDetails  from 'pages/MovieDetails/MovieDetails';
+import MovieDetails from 'pages/MovieDetails/MovieDetails';
 import { useLocation } from 'react-router-dom';
-
+import PropTypes from 'prop-types';
 
 const MovieList = ({ items }) => {
-   
     const location = useLocation();
-  
+
     return (
         <div>
             <ul>
@@ -29,3 +28,12 @@ const MovieList = ({ items }) => {
 };
 
 export default MovieList;
+
+MovieList.propTypes = {
+    items: PropTypes.arrayOf(
+        PropTypes.exact({
+            id: PropTypes.string.isRequired,
+            original_title: PropTypes.string.isRequired,
+        })
+    ),
+};
