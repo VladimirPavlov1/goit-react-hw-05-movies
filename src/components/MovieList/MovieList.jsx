@@ -9,7 +9,7 @@ const MovieList = ({ items }) => {
     return (
         <div>
             <ul>
-                {items.map(({ id, original_title = 'Name not Found' }) => {
+                {items.map(({ id, title, name }) => {
                     return (
                         <li key={id}>
                             <NavLink
@@ -17,7 +17,7 @@ const MovieList = ({ items }) => {
                                 state={{ from: location }}
                                 element={<MovieDetails />}
                             >
-                                {original_title}
+                                {title || name}
                             </NavLink>
                         </li>
                     );
@@ -33,7 +33,7 @@ MovieList.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,
-            original_title: PropTypes.string.isRequired,
+            original_title: PropTypes.string,
         })
     ),
 };

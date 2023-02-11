@@ -1,9 +1,12 @@
-import { MainLink, Container, Nav, Header } from './App.styled';
+import { Container } from './App.styled';
 import { ToastContainer } from 'react-toastify';
 import { Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import { FallingLines } from 'react-loader-spinner';
-
+import { lazy } from 'react';
+import SharedLayout from './SharedLayout/SharedLayout';
+// import SharedLayout from './SharedLayout/SharedLayout';
+// import { Loader } from './Loader/Loader';
+// import { Suspense } from 'react';
+// const SharedLayout = lazy(()=>import('./SharedLayout/SharedLayout'));
 const Home = lazy(() => import('../pages/Home/Home'));
 const Movies = lazy(() => import('../pages/Movies/Movies'));
 const MovieDetails = lazy(() => import('../pages/MovieDetails/MovieDetails'));
@@ -14,35 +17,17 @@ const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 export const App = () => {
     return (
         <Container>
-            <Header>
-                <Nav>
-                    <MainLink to="/" end>
-                        Home
-                    </MainLink>
-                    <MainLink to="/movies">Movies</MainLink>
-                </Nav>
-            </Header>
-
-            <Suspense
-                fallback={
-                    <FallingLines
-                        color="#4fa94d"
-                        width="100"
-                        visible={true}
-                        ariaLabel="falling-lines-loading"
-                    />
-                }
-            >
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/movies" element={<Movies />} />
-                    <Route path="/movies/:movieId" element={<MovieDetails />}>
+            <Routes>
+                <Route path="/" element={<SharedLayout />}>
+                    <Route index element={<Home />} />
+                    <Route path="movies" element={<Movies />} />
+                    <Route path="movies/:movieId" element={<MovieDetails />}>
                         <Route path="cast" element={<Cast />} />
                         <Route path="reviews" element={<Reviews />} />
                     </Route>
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </Suspense>
+                </Route>
+                <Route path="*" element={<NotFound />} />
+            </Routes>
 
             <ToastContainer />
         </Container>

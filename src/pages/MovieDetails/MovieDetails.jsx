@@ -6,111 +6,71 @@ import Reviews from 'components/Reviews/Reviews';
 import { Outlet } from 'react-router-dom';
 import {
     Arrow,
-    MovieList,
     BtnLink,
-    Btn,
-    MovieListItem,
+    Btn,   
 } from './MovieDetails.styled';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import MovieCard from 'components/MovieCard/MovieCard';
+import { Loader } from 'components/Loader/Loader';
 
 const MovieDetails = () => {
+    const [movie, setMovie] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
     const { movieId } = useParams();
 
     const location = useLocation();
 
-    const backLinkHref =
-        location.state?.from ??
-        location.state?.location.state.from ??
-        location.state?.location.state.location.state.from ??
-        '/movies';
-
-    const [movie, setMovie] = useState(null);
+    const backLinkHref = location.state?.from ?? '/';
 
     useEffect(() => {
-        if (movieId === null) {
-            return;
-        } else {
-            getMovieDetails(movieId)
-                .then(data => {
-                    if (data.data.length === 0) {
-                        toast.warn('Нажаль нічого не знайдено', {
-                            autoclose: 3000,
-                            theme: 'colored',
-                        });
-                        return;
-                    }
-                    setMovie(movie => (movie = data.data));
-                })
-                .catch(({ message }) => {
-                    message = 'Щось пішло не так. Спробуйте ще раз';
-                    return toast.error(message);
-                });
-        }
+        setIsLoading(true);
+
+        const movieInfo = async () => {
+            try {
+                const data = await getMovieDetails(movieId);
+                setMovie(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        movieInfo();
     }, [movieId]);
 
-    const startImage = 'https://image.tmdb.org/t/p/w300/';
-
-    const getUserScoreFromMovie = () => {
-        if (movie !== null) {
-            const userScore = Math.round(movie.vote_average * 10);
-            return userScore;
-        }
-    };
-
-    const getGenresFromMovie = () => {
-        if (movie !== null) {
-            const genresNames = movie.genres.map(genre => genre.name);
-            return genresNames.join('  ');
-        }
-    };
-
-    const getReleaseDate = date => {
-        const newDate = date.slice(0, 4);
-        return newDate;
-    };
-
+    const notify = () => {
+        toast.warn("Default Notification !");
+    }
+    
     return (
         <div>
+           
             <Btn>
                 <Arrow />
                 <BtnLink to={backLinkHref}>Go back</BtnLink>
             </Btn>
 
-            {movie && (
-                <MovieList>
-                    <MovieListItem>
-                        <img src={startImage + movie.poster_path} alt="" />
-                    </MovieListItem>
-                    <MovieListItem>
-                        <h2>
-                            {movie.original_title} (
-                            {getReleaseDate(movie.release_date)})
-                        </h2>
-                        <p>User score:{getUserScoreFromMovie()}%</p>
-                        <h2>Overview</h2>
-                        <p>{movie.overview}</p>
-                        <h2>Genres</h2>
-                        <p> {getGenresFromMovie()}</p>
-                    </MovieListItem>
-                </MovieList>
-            )}
+            {movie && 
+                <MovieCard movie={movie}/>
+            }
             <h3>Aditional information</h3>
             <ul>
                 <li>
-                    <NavLink to="cast" state={{ location }} element={<Cast />}>
+                    <NavLink to="cast" state={{ from:backLinkHref }} element={<Cast />}>
                         <h3>Cast</h3>
                     </NavLink>
                 </li>
                 <li>
-                    <NavLink
-                        to="reviews"
-                        state={{ location }}
-                        element={<Reviews />}
-                    >
+                    <NavLink to="reviews"  state={{ from:backLinkHref }} element={<Reviews />}>
                         <h3>Reviews</h3>
                     </NavLink>
                 </li>
             </ul>
+            {isLoading && <Loader />}
+            {error && <p>{notify}</p>}
             <Outlet />
         </div>
     );

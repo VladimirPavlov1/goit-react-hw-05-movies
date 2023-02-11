@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const getTrend = () => {
-    return axios.get(
+export  async function getTrend(){
+    const results = await axios.get(
         'https://api.themoviedb.org/3/trending/all/day?api_key=27cddf1230eab22bdf20f54c99a70037',
         {
             params: {
@@ -9,10 +9,11 @@ export const getTrend = () => {
             },
         }
     );
+    return results.data.results
 };
 
-export const getMovieDetails = movieId => {
-    return axios.get(
+export async function getMovieDetails(movieId){
+    const results = await axios.get(
         `https://api.themoviedb.org/3/movie/${movieId}?api_key=27cddf1230eab22bdf20f54c99a70037`,
         {
             params: {
@@ -20,10 +21,11 @@ export const getMovieDetails = movieId => {
             },
         }
     );
+    return results.data
 };
 
-export const getMovieByName = movieName => {
-    return axios.get(
+export async function getMovieByName(movieName){
+    const results = await axios.get(
         'https://api.themoviedb.org/3/search/movie?api_key=27cddf1230eab22bdf20f54c99a70037',
         {
             params: {
@@ -31,16 +33,19 @@ export const getMovieByName = movieName => {
             },
         }
     );
+    return results.data.results
 };
 
-export const getCast = movieId => {
-    return axios.get(
+export async function getCast(movieId){
+    const results = await axios.get(
         `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=27cddf1230eab22bdf20f54c99a70037`
     );
+    return results.data.cast
 };
 
-export const getReviews = movieId => {
-    return axios.get(
+export async function getReviews(movieId){
+    const results = await axios.get(
         `https://api.themoviedb.org/3/movie/${movieId}/reviews?api_key=27cddf1230eab22bdf20f54c99a70037`
     );
+    return results.data.results
 };

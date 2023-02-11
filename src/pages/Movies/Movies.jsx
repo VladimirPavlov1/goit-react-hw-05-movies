@@ -6,70 +6,55 @@ import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Input, BtnSearch } from './Movies.styled';
 import 'react-toastify/dist/ReactToastify.css';
+import { Loader } from 'components/Loader/Loader';
 
 const Movies = () => {
-    const [searchName, setSearchName] = useState('');
+   
     const [items, setItems] = useState([]);
     const [searchParams, setSearchParams] = useSearchParams();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const name = searchParams.get('name');
+    
 
-    const updateQueryString = name => {
-        const nextParams = name !== '' ? { name } : {};
-        setSearchParams(nextParams);
-    };
+   
 
     const handleSubmit = (values, { resetForm }) => {
         const { queryName } = values;
-
-        setSearchName(searchName => (searchName = queryName));
-        updateQueryString(queryName);
+        if (queryName.trim() === ''){
+             toast.warn('Введіть ваш запит', {
+                autoclose: 3000,
+                theme: 'colored',
+            });
+            return;
+        }
+        setSearchParams({name:queryName});
+     
         resetForm(values);
     };
 
     useEffect(() => {
-        if (searchName === '') {
-            return;
-        }
+       
+        const name = searchParams.get('name');
+        setIsLoading(true);
+        const searchMovies = async () => {
+            try {
+                
+                const data = await getMovieByName(name);
+        
+                setItems(data);
+               
+            } catch (error) {
+                
+                setError(error.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
 
-        getMovieByName(searchName)
-            .then(data => {
-                if (data.data.results.length === 0) {
-                    toast.warn('Нажаль нічого не знайдено', {
-                        autoclose: 3000,
-                        theme: 'colored',
-                    });
-                    return;
-                }
-                return setItems(items => (items = data.data.results));
-            })
-            .catch(({ message }) => {
-                message = 'Щось пішло не так. Спробуйте ще раз';
-                return toast.error(message);
-            });
-    }, [searchName]);
-
-    useEffect(() => {
-        if (name === null) {
-            return;
-        }
-
-        getMovieByName(name)
-            .then(data => {
-                if (data.data.results.length === 0) {
-                    toast.warn('Нажаль нічого не знайдено', {
-                        autoclose: 3000,
-                        theme: 'colored',
-                    });
-                    return;
-                }
-                return setItems(items => (items = data.data.results));
-            })
-            .catch(({ message }) => {
-                message = 'Щось пішло не так. Спробуйте ще раз';
-                return toast.error(message);
-            });
-    }, [name]);
+        searchMovies();
+         
+    }, [searchParams]);
 
     return (
         <div>
@@ -79,7 +64,10 @@ const Movies = () => {
                     <BtnSearch type="submit">Пошук</BtnSearch>
                 </Form>
             </Formik>
-            <MovieList items={items} />
+
+            {isLoading && <Loader />}
+            {error && <p>ойоййой, що робиться</p>}
+            {items && <MovieList items={items} />}
         </div>
     );
 };
