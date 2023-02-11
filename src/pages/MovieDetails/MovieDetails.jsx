@@ -1,8 +1,6 @@
 import { getMovieDetails } from 'apiServises';
 import { useState, useEffect } from 'react';
 import { useLocation, useParams, NavLink } from 'react-router-dom';
-import Cast from 'components/Cast/Cast';
-import Reviews from 'components/Reviews/Reviews';
 import { Outlet } from 'react-router-dom';
 import {
     Arrow,

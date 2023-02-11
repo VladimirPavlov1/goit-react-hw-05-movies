@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import MovieDetails from 'pages/MovieDetails/MovieDetails';
 import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -33,7 +32,8 @@ MovieList.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,
-            original_title: PropTypes.string,
+            title: PropTypes.string,
+            name:PropTypes.string.isRequired
         })
     ),
 };
