@@ -15,7 +15,7 @@ const MovieList = ({ items }) => {
                             <NavLink
                                 to={`/movies/${id}`}
                                 state={{ from: location }}
-                                element={<MovieDetails />}
+                               
                             >
                                 {title || name}
                             </NavLink>
